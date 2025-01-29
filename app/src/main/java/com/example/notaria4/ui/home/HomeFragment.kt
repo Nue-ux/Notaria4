@@ -10,10 +10,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -41,8 +38,11 @@ class HomeFragment : Fragment() {
 
         dbHelper = DatabaseHelper(requireContext())
 
-        val editTextName: EditText = binding.editTextName
-        val editTextEmail: EditText = binding.editTextEmail
+        val spinnerNotary: Spinner = binding.spinnerNotary
+        val spinnerRoom: Spinner = binding.spinnerRoom
+        val editTextDate: EditText = binding.editTextDate
+        val editTextTime: EditText = binding.editTextTime
+        val editTextDescription: EditText = binding.editTextDescription
         val buttonSubmit: Button = binding.buttonSubmit
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -52,18 +52,24 @@ class HomeFragment : Fragment() {
         }
 
         buttonSubmit.setOnClickListener {
-            val name = editTextName.text.toString()
-            val email = editTextEmail.text.toString()
-            if (name.isNotEmpty() && email.isNotEmpty()) {
+            val notary = spinnerNotary.selectedItem.toString()
+            val room = spinnerRoom.selectedItem.toString()
+            val date = editTextDate.text.toString()
+            val time = editTextTime.text.toString()
+            val description = editTextDescription.text.toString()
+            if (notary.isNotEmpty() && room.isNotEmpty() && date.isNotEmpty() && time.isNotEmpty() && description.isNotEmpty()) {
                 val db = dbHelper.writableDatabase
                 val values = ContentValues().apply {
-                    put(DatabaseHelper.COLUMN_NAME, name)
-                    put(DatabaseHelper.COLUMN_EMAIL, email)
+                    put(DatabaseHelper.COLUMN_NAME, notary)
+                    put(DatabaseHelper.COLUMN_EMAIL, room)
+                    put("date", date)
+                    put("time", time)
+                    put("description", description)
                 }
                 val newRowId = db.insert(DatabaseHelper.TABLE_USERS, null, values)
                 if (newRowId != -1L) {
                     Toast.makeText(context, "Data saved successfully", Toast.LENGTH_SHORT).show()
-                    sendNotification(name, email)
+                    sendNotification(notary, room, date, time, description)
                 } else {
                     Toast.makeText(context, "Error saving data", Toast.LENGTH_SHORT).show()
                 }
@@ -75,9 +81,9 @@ class HomeFragment : Fragment() {
         return root
     }
 
-    private fun sendNotification(name: String, email: String) {
-        val title = "New User Added"
-        val content = "Name: $name, Email: $email"
+    private fun sendNotification(notary: String, room: String, date: String, time: String, description: String) {
+        val title = "New Appointment Added"
+        val content = "Notary: $notary, Room: $room, Date: $date, Time: $time, Description: $description"
 
         // Save notification to database
         val db = dbHelper.writableDatabase
