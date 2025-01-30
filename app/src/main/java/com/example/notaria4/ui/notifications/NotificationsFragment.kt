@@ -41,7 +41,7 @@ class NotificationsFragment : Fragment() {
         }
 
         val recyclerView: RecyclerView = binding.recyclerView
-        recyclerView.layoutManager = GridLayoutManager(context, 2) // 2 columnas
+        recyclerView.layoutManager = GridLayoutManager(context, 2) // 2 columns
         notificationAdapter = NotificationAdapter(getAllNotifications())
         recyclerView.adapter = notificationAdapter
 
@@ -50,7 +50,7 @@ class NotificationsFragment : Fragment() {
 
     private fun getAllNotifications(): List<Notification> {
         val notificationList = mutableListOf<Notification>()
-        val db = dbHelper?.readableDatabase ?: return notificationList // Check if dbHelper is null
+        val db = dbHelper?.readableDatabase ?: return notificationList
 
         val cursor: Cursor? = try {
             db.query(

@@ -15,8 +15,8 @@ data class Notification(
 class NotificationAdapter(private val notifications: List<Notification>) : RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder>() {
 
     class NotificationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textViewTitle: TextView = itemView.findViewById(R.id.textViewTitle)
-        val textViewContent: TextView = itemView.findViewById(R.id.textViewContent)
+        val textViewTitle: TextView = itemView.findViewById(R.id.titleTextView)
+        val textViewContent: TextView = itemView.findViewById(R.id.contentTextView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationViewHolder {

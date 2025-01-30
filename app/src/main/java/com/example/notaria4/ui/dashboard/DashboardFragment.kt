@@ -6,11 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notaria4.database.DatabaseHelper
 import com.example.notaria4.databinding.FragmentDashboardBinding
@@ -19,8 +18,8 @@ class DashboardFragment : Fragment() {
 
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
-    private var dbHelper: DatabaseHelper? = null
-    private lateinit var reservationAdapter: DashboardReservationAdapter
+    private lateinit var dbHelper: DatabaseHelper
+    private lateinit var dashboardReservationAdapter: DashboardReservationAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,28 +34,28 @@ class DashboardFragment : Fragment() {
 
         dbHelper = DatabaseHelper(requireContext())
 
-        val textView: TextView = binding.textDashboard
+        val textView = binding.textDashboard
         dashboardViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
 
         val recyclerView: RecyclerView = binding.recyclerView
-        recyclerView.layoutManager = GridLayoutManager(context, 2) // 2 columnas
-        reservationAdapter = DashboardReservationAdapter(getAllReservations())
-        recyclerView.adapter = reservationAdapter
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        dashboardReservationAdapter = DashboardReservationAdapter(getAllReservations())
+        recyclerView.adapter = dashboardReservationAdapter
 
         return root
     }
 
     private fun getAllReservations(): List<Reservation> {
         val reservationList = mutableListOf<Reservation>()
-        val db = dbHelper?.readableDatabase ?: return reservationList // Check if dbHelper is null
+        val db = dbHelper.readableDatabase
 
         val cursor: Cursor? = try {
             db.query(
                 DatabaseHelper.TABLE_USERS,
                 arrayOf(DatabaseHelper.COLUMN_NAME, DatabaseHelper.COLUMN_EMAIL, DatabaseHelper.COLUMN_DATE, DatabaseHelper.COLUMN_TIME, DatabaseHelper.COLUMN_DESCRIPTION),
-                null, null, null, null, "${DatabaseHelper.COLUMN_DATE} DESC, ${DatabaseHelper.COLUMN_TIME} DESC"
+                null, null, null, null, "${DatabaseHelper.COLUMN_DATE} ASC"
             )
         } catch (e: Exception) {
             Log.e("DashboardFragment", "Error querying database", e)
