@@ -1,34 +1,49 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F8F9FA"
     tools:context=".ui.home.HomeFragment">
 
+    <!-- Título -->
     <TextView
         android:id="@+id/text_home"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_margin="8dp"
+        android:text="Formulario de Reserva"
         android:textAlignment="center"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/form_container"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Contenedor del formulario -->
     <LinearLayout
         android:id="@+id/form_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp"
+        android:background="@android:color/white"
+        android:elevation="4dp"
+        android:layout_margin="16dp"
         app:layout_constraintTop_toBottomOf="@id/text_home"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- Selector de Notario -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Selecciona un notario:"
+            android:textStyle="bold"
+            android:paddingBottom="4dp" />
 
         <Spinner
             android:id="@+id/spinnerNotary"
@@ -36,34 +51,113 @@
             android:layout_height="wrap_content"
             android:entries="@array/notary_names" />
 
+        <!-- Selector de Sala -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Selecciona una sala:"
+            android:textStyle="bold"
+            android:paddingTop="8dp"
+            android:paddingBottom="4dp" />
+
         <Spinner
             android:id="@+id/spinnerRoom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:entries="@array/room_names" />
 
-        <EditText
-            android:id="@+id/editTextDate"
+        <!-- Selector de Fecha -->
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Date" />
+            android:text="Fecha:"
+            android:textStyle="bold"
+            android:paddingTop="8dp"
+            android:paddingBottom="4dp" />
 
-        <EditText
-            android:id="@+id/editTextTime"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Time" />
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <Spinner
+                android:id="@+id/spinnerDay"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Día" />
+
+            <Spinner
+                android:id="@+id/spinnerMonth"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Mes" />
+
+            <Spinner
+                android:id="@+id/spinnerYear"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Año" />
+        </LinearLayout>
+
+        <!-- Selector de Hora -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hora:"
+            android:textStyle="bold"
+            android:paddingTop="8dp"
+            android:paddingBottom="4dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <Spinner
+                android:id="@+id/spinnerHour"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Hora" />
+
+            <Spinner
+                android:id="@+id/spinnerMinute"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Minuto" />
+        </LinearLayout>
+
+        <!-- Descripción -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Descripción:"
+            android:textStyle="bold"
+            android:paddingTop="8dp"
+            android:paddingBottom="4dp" />
 
         <EditText
             android:id="@+id/editTextDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Description" />
+            android:hint="Ingresa una descripción"
+            android:minLines="3"
+            android:gravity="top"
+            android:background="@android:drawable/editbox_background" />
 
+        <!-- Botón de Enviar -->
         <Button
             android:id="@+id/buttonSubmit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Submit" />
+            android:text="Enviar"
+            android:layout_marginTop="16dp" />
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

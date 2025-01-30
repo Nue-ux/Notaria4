@@ -10,7 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notaria4.database.DatabaseHelper
 import com.example.notaria4.databinding.FragmentDashboardBinding
@@ -20,7 +20,7 @@ class DashboardFragment : Fragment() {
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
     private var dbHelper: DatabaseHelper? = null
-    private lateinit var userAdapter: UserAdapter
+    private lateinit var reservationAdapter: DashboardReservationAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,16 +41,16 @@ class DashboardFragment : Fragment() {
         }
 
         val recyclerView: RecyclerView = binding.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        userAdapter = UserAdapter(getAllUsers())
-        recyclerView.adapter = userAdapter
+        recyclerView.layoutManager = GridLayoutManager(context, 2) // 2 columnas
+        reservationAdapter = DashboardReservationAdapter(getAllReservations())
+        recyclerView.adapter = reservationAdapter
 
         return root
     }
 
-    private fun getAllUsers(): List<User> {
-        val userList = mutableListOf<User>()
-        val db = dbHelper?.readableDatabase ?: return userList // Check if dbHelper is null
+    private fun getAllReservations(): List<Reservation> {
+        val reservationList = mutableListOf<Reservation>()
+        val db = dbHelper?.readableDatabase ?: return reservationList // Check if dbHelper is null
 
         val cursor: Cursor? = try {
             db.query(
@@ -65,18 +65,18 @@ class DashboardFragment : Fragment() {
 
         cursor?.use {
             while (it.moveToNext()) {
-                val name = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_NAME))
-                val email = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_EMAIL))
+                val notary = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_NAME))
+                val room = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_EMAIL))
                 val date = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DATE))
                 val time = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_TIME))
                 val description = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DESCRIPTION))
-                userList.add(User(name, email, date, time, description))
+                reservationList.add(Reservation(notary, room, date, time, description))
             }
         } ?: run {
             Log.e("DashboardFragment", "Error: Cursor is null")
-            Toast.makeText(requireContext(), "Error loading users", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Error loading reservations", Toast.LENGTH_SHORT).show()
         }
-        return userList
+        return reservationList
     }
 
     override fun onDestroyView() {
