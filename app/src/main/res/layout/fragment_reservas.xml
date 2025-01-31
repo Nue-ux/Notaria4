@@ -48,5 +48,13 @@
             android:layout_height="wrap_content"
             android:text="Descripción"
             android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/buttonDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Eliminar"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>
