@@ -41,20 +41,20 @@ class DashboardFragment : Fragment() {
 
         val recyclerView: RecyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
-        dashboardReservationAdapter = DashboardReservationAdapter(getAllReservations())
+        dashboardReservationAdapter = DashboardReservationAdapter(getAllReservations(), dbHelper)
         recyclerView.adapter = dashboardReservationAdapter
 
         return root
     }
 
-    private fun getAllReservations(): List<Reservation> {
+    private fun getAllReservations(): MutableList<Reservation> {
         val reservationList = mutableListOf<Reservation>()
         val db = dbHelper.readableDatabase
 
         val cursor: Cursor? = try {
             db.query(
                 DatabaseHelper.TABLE_USERS,
-                arrayOf(DatabaseHelper.COLUMN_NAME, DatabaseHelper.COLUMN_EMAIL, DatabaseHelper.COLUMN_DATE, DatabaseHelper.COLUMN_TIME, DatabaseHelper.COLUMN_DESCRIPTION),
+                arrayOf(DatabaseHelper.COLUMN_ID, DatabaseHelper.COLUMN_NAME, DatabaseHelper.COLUMN_EMAIL, DatabaseHelper.COLUMN_DATE, DatabaseHelper.COLUMN_TIME, DatabaseHelper.COLUMN_DESCRIPTION),
                 null, null, null, null, "${DatabaseHelper.COLUMN_DATE} ASC"
             )
         } catch (e: Exception) {
@@ -64,12 +64,13 @@ class DashboardFragment : Fragment() {
 
         cursor?.use {
             while (it.moveToNext()) {
+                val id = it.getLong(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ID))
                 val notary = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_NAME))
                 val room = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_EMAIL))
                 val date = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DATE))
                 val time = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_TIME))
                 val description = it.getString(it.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DESCRIPTION))
-                reservationList.add(Reservation(notary, room, date, time, description))
+                reservationList.add(Reservation(id, notary, room, date, time, description))
             }
         } ?: run {
             Log.e("DashboardFragment", "Error: Cursor is null")
