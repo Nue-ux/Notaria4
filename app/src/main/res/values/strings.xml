@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Notaria4</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_home">Reservar</string>
+    <string name="title_dashboard">Citas</string>
+    <string name="title_notifications">Notificaciones</string>
     <string name="channel_name">User Data Channel</string>
     <string name="channel_description">Channel for user data notifications</string>
     <string-array name="notary_names">
